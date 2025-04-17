@@ -29,9 +29,7 @@ void get_mac_address(const char *iface, int sock, unsigned char *mac)
 	memset(&if_mac, 0, sizeof(struct ifreq));
 	strncpy(if_mac.ifr_name, iface, IFNAMSIZ - 1);
 	if (ioctl(sock, SIOCGIFHWADDR, &if_mac) < 0)
-	{
 		handle_error("SIOCGIFHWADDR failed", sock);
-	}
 	memcpy(mac, if_mac.ifr_hwaddr.sa_data, ETH_ALEN);
 }
 
@@ -41,9 +39,7 @@ void get_ip_address(const char *iface, int sock, unsigned char *ip)
 	memset(&if_ip, 0, sizeof(struct ifreq));
 	strncpy(if_ip.ifr_name, iface, IFNAMSIZ - 1);
 	if (ioctl(sock, SIOCGIFADDR, &if_ip) < 0)
-	{
 		handle_error("SIOCGIFADDR failed", sock);
-	}
 	struct sockaddr_in *ip_addr = (struct sockaddr_in *)&if_ip.ifr_addr;
 	memcpy(ip, &ip_addr->sin_addr, 4);
 }
@@ -78,9 +74,7 @@ int main(int argc, char *argv[])
 	memset(&if_idx, 0, sizeof(struct ifreq));
 	strncpy(if_idx.ifr_name, iface, IFNAMSIZ - 1);
 	if (ioctl(sock, SIOCGIFINDEX, &if_idx) < 0)
-	{
 		handle_error("SIOCGIFINDEX failed", sock);
-	}
 
 	get_mac_address(iface, sock, src_mac);
 	get_ip_address(iface, sock, src_ip);
@@ -123,9 +117,7 @@ int main(int argc, char *argv[])
 	memcpy(socket_address.sll_addr, broadcast_mac, ETH_ALEN);
 
 	if (sendto(sock, buffer, ETH_FRAME_LEN, 0, (struct sockaddr *)&socket_address, sizeof(socket_address)) < 0)
-	{
 		handle_error("sendto failed", sock);
-	}
 
 	while (1)
 	{
